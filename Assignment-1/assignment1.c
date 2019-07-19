@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-/*Only sorting is left to be implemented*/
+
 typedef struct {
 	int data;
 	unsigned int xor;
