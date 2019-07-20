@@ -7,8 +7,8 @@
 int n; //global
 struct node
 {
- int data;
- struct node *xor_;
+  int data;
+  struct node *xor_;
 };
 //---------------------------------------------------------------------------------------
 // Bubble sort - without changing data field of any node
@@ -69,31 +69,29 @@ printf("\b \b\n");
 //---------------------------------------------------------------------------------------
 void traverse_from_end_to_front(struct node *tail)
 {
-printf("Doubly linked list traversed from end to front: ");
-struct node *b,*a,*prev,*curr,*next;
-int i;
-b = tail->xor_;
-a = tail;
-prev = a;
-curr = b;
-//realprev = b;
-printf("%d,",a->data);
-for(i=2;i<=n;i++)
-{
-  printf("%d,",curr->data);
-  next = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
-  prev = curr;
-  curr = next;
-}
-printf("\b \b\n");
+  printf("Doubly linked list traversed from end to front: ");
+  struct node *b,*a,*prev,*curr,*next;
+  int i;
+  b = tail->xor_;
+  a = tail;
+  prev = a;
+  curr = b;
+  printf("%d,",a->data);
+  for(i=2;i<=n;i++)
+  {
+    printf("%d,",curr->data);
+    next = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
+    prev = curr;
+    curr = next;
+  }
+  printf("\b \b\n");
 }
 //---------------------------------------------------------------------------------------
 void reverse(struct node **head, struct node **tail) // since it is symmetric
 {
-  struct node *swap;
-  swap = *head;
-  *head = *tail;
-  *tail = swap;
+    (*head) = (struct node*)((uintptr_t)(*head) + (uintptr_t)(*tail));
+    (*tail) = (struct node*)((uintptr_t)(*head) - (uintptr_t)(*tail));
+    (*head) = (struct node*)((uintptr_t)(*head) - (uintptr_t)(*tail));
 }
 //--------------------------------------------------------------------------------------------
 void sort(struct node **head, struct node **tail) //without change data field of any node.
@@ -132,33 +130,34 @@ void sort(struct node **head, struct node **tail) //without change data field of
 //---------------------------------------------------------------------------------------------
 int main()
 {
-//int n;
-srand(time(0)); //seeding
-struct node *a,*c,*head,*tail,*prev,*curr;
-printf("Enter n: ");
-scanf("%d",&n);
-a = (struct node*)malloc(sizeof(struct node));
-a->data = rand()%100; //not more than 2 digits
-head = a; //head
-prev = a;
-c = NULL;
-int i;
-for(i=2;i<=n;i++)
-{
-curr = (struct node*)malloc(sizeof(struct node));
-curr->data = rand()%100;
-prev->xor_ = (struct node*)(((uintptr_t)curr)^((uintptr_t)c)); //xor of previous
-c = prev;
-prev = curr;
+   //int n;
+  srand(time(0)); //seeding
+  struct node *a,*c,*head,*tail,*prev,*curr;
+  printf("Enter n: ");
+  scanf("%d",&n);
+  a = (struct node*)malloc(sizeof(struct node));
+  a->data = rand()%100; //not more than 2 digits
+  head = a; //head
+  prev = a;
+  c = NULL;
+  int i;
+  for(i=2;i<=n;i++)
+  {
+      curr = (struct node*)malloc(sizeof(struct node));
+      curr->data = rand()%100;
+      prev->xor_ = (struct node*)(((uintptr_t)curr)^((uintptr_t)c)); //xor of previous
+      c = prev;
+      prev = curr;
+  }
+  tail = curr; //tail
+  curr->xor_ = c;
+  traverse_from_front_to_end(head);
+  traverse_from_end_to_front(tail);
+  reverse(&head,&tail);
+  printf("Reversed ");
+  traverse_from_front_to_end(head); //after reversing
+  sort(&head,&tail);
+  printf("Sorted ");
+  traverse_from_front_to_end(head);
 }
-tail = curr; //tail
-curr->xor_ = c;
-traverse_from_front_to_end(head);
-traverse_from_end_to_front(tail);
-reverse(&head,&tail);
-printf("Reversed ");
-traverse_from_front_to_end(head); //after reversing
-sort(&head,&tail);
-printf("Sorted ");
-traverse_from_front_to_end(head);
-}
+
