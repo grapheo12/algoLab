@@ -131,33 +131,33 @@ void sort(struct node **head, struct node **tail) //without change data field of
 //---------------------------------------------------------------------------------------------
 int main()
 {
-//int n;
-srand(time(0)); //seeding
-struct node *a,*c,*head,*tail,*prev,*curr;
-printf("Enter n: ");
-scanf("%d",&n);
-a = (struct node*)malloc(sizeof(struct node));
-a->data = rand()%100; //not more than 2 digits
-head = a; //head
-prev = a;
-c = NULL;
-int i;
-for(i=2;i<=n;i++)
-{
-curr = (struct node*)malloc(sizeof(struct node));
-curr->data = rand()%100;
-prev->xor_ = (struct node*)(((uintptr_t)curr)^((uintptr_t)c)); //xor of previous
-c = prev;
-prev = curr;
-}
-tail = curr; //tail
-curr->xor_ = c;
-traverse_from_front_to_end(head);
-traverse_from_end_to_front(tail);
-reverse(&head,&tail);
-printf("Reversed ");
-traverse_from_front_to_end(head); //after reversing
-sort(&head,&tail);
-printf("Sorted ");
-traverse_from_front_to_end(head);
+  //int n;
+  srand(time(0)); //seeding
+  struct node *a,*c,*head,*tail,*prev,*curr;
+  printf("Enter n: ");
+  scanf("%d",&n);
+  a = (struct node*)malloc(sizeof(struct node));
+  a->data = rand()%100; //not more than 2 digits
+  head = a; //head
+  prev = a;
+  c = NULL;
+  int i;
+  for(i=2;i<=n;i++)
+  {
+     curr = (struct node*)malloc(sizeof(struct node));
+     curr->data = rand()%100;
+     prev->xor_ = (struct node*)(((uintptr_t)curr)^((uintptr_t)c)); //xor of previous
+     c = prev;
+     prev = curr;
+ }
+  tail = curr; //tail
+  curr->xor_ = c;
+  traverse_from_front_to_end(head);
+  traverse_from_end_to_front(tail);
+  reverse(&head,&tail);
+  printf("Reversed ");
+  traverse_from_front_to_end(head); //after reversing
+  sort(&head,&tail);
+  printf("Sorted ");
+  traverse_from_front_to_end(head);
 }
