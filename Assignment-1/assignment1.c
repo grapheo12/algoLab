@@ -1,156 +1,164 @@
-#include <stdio.h>
-#include <stdlib.h>
+//(c)ubc
+#include<stdio.h>
+#include<stdlib.h>
+#include<inttypes.h>
+#include<time.h>
 
-typedef struct {
-	int data;
-	unsigned int xor;
-} node;
+int n; //global
+struct node
+{
+ int data;
+ struct node *xor_;
+};
+//---------------------------------------------------------------------------------------
+// Bubble sort - without changing data field of any node
+void sort_linked_list(struct node **head,struct node **tail)
+{
+   struct node *prev,*curr,*next;
+   int i,j;
+   for(i=1;i<n;i++)
+   {
+     curr = *head;
+     next = (curr->xor_);
+     prev = NULL;
+     for(j=1;j<=(n-i);j++)
+     {
+       if((curr->data) > (next->data))
+       {
+             if(curr == *head)
+              *head = next;
+             if(next == *tail)
+              *tail = curr;
+             curr->xor_ = next->xor_;
+             next->xor_ = curr;
+             if(prev != NULL)
+              prev->xor_ = next;
+             prev = next;
+             next = curr->xor_;
+       }
+       else
+       {
+         prev = curr;
+         curr = next;
+         next = next->xor_;
+       }
+     }
 
-void insertNode(node **head, int value){
-	//Always insert at the front.
-	node *newNode = (node*)malloc(sizeof(node));
-	newNode -> data = value;
-	newNode -> xor = 0 ^ (unsigned int)(*head);
-	
-	(*head) -> xor = (unsigned int)newNode ^ ((*head) -> xor);
-	*head = newNode;
+   }
 }
-
-node * createList(int value){
-	//Create the first element of the list.
-	node *newNode = (node*)malloc(sizeof(node));
-	newNode -> data = value;
-	newNode -> xor = 0;
-	
-	return newNode;
+//---------------------------------------------------------------------------------------
+void traverse_from_front_to_end(struct node *head)
+{
+ printf("Doubly linked list traversed from front to end: ");
+ struct node *b,*a,*prev,*curr,*next;
+ int i;
+ b = head->xor_;
+ a = head;
+ prev = a;
+ curr = b;
+ printf("%d,",a->data);
+for(i=2;i<=n;i++)
+{
+    printf("%d,",curr->data);
+    next = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
+    prev = curr;
+    curr = next;
 }
-
-void traverse_from_front_to_end(node *head){
-	/* Since x ^ (x ^ y) = y.
-	 * So we can XOR current element with xor stored in next to get the next -> next pointer.
-	 * Iteration stops if we get the next to be 0, ie, NULL
-	 */
-	 printf("%d ", head -> data);
-	 node *next = (node*)(head -> xor);
-	 
-	 while (next != NULL){
-	 	printf("%d ", next -> data);
-	 	node *tmp = next;
-	 	next = (node*)(next -> xor ^ (unsigned int)head);
-	 	head = tmp;
-	 }
-	 
-	 printf("\n");
-} 
-
-/*In the following two functions we use the logic
- *that a doubly linked list is bidirectional and
- *XOR operation is commutative
- */
- 
-void traverse_from_end_to_front(node *tail){
-	//Employ the same logic as before.
-	traverse_from_front_to_end(tail);
+printf("\b \b\n");
 }
-
-void reverse(node **head, node **tail){
-	//Swapping the head and tail pointers should reverse the list logically.
-	node *tmp = *head;
-	*head = *tail;
-	*tail = tmp;
+//---------------------------------------------------------------------------------------
+void traverse_from_end_to_front(struct node *tail)
+{
+printf("Doubly linked list traversed from end to front: ");
+struct node *b,*a,*prev,*curr,*next;
+int i;
+b = tail->xor_;
+a = tail;
+prev = a;
+curr = b;
+//realprev = b;
+printf("%d,",a->data);
+for(i=2;i<=n;i++)
+{
+  printf("%d,",curr->data);
+  next = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
+  prev = curr;
+  curr = next;
 }
-
-void sort(node **head, node **tail){
-	//Uses BubbleSort.
-	int isSorted;
-	while(1){
-		isSorted = 1;
-		node *h = *head;
-		node *t = *tail;
-		node *leftP;
-		node *next = (node*)(h -> xor);
-		if (next == NULL)
-			return;
-		
-		if (h -> data > next -> data){
-			isSorted = 0;
-			node *next2 = (node*)((unsigned int)h ^ (next -> xor));
-			h -> xor = (unsigned int)next2 ^ (unsigned int)next;
-			next -> xor = (unsigned int)h;
-			if (next2 != NULL){
-				node *next3 = (node*)((unsigned int)next ^ (next2 -> xor));
-				next2 -> xor = (unsigned int)next3 ^ (unsigned int)h;
-			}
-			*head = next;
-			
-			leftP = next;
-			//traverse_from_front_to_end(*head);
-		}else{
-			leftP = h;
-			h = next;
-		}	
-	
-	
-		while (1){
-			//traverse_from_front_to_end(*head);
-			next = (node*)((h -> xor) ^ (unsigned int)leftP);
-			if (next == NULL)
-				break;
-			if (h -> data > next -> data){
-				isSorted = 0;
-				node *next2 = (node*)((unsigned int)h ^ (next -> xor));
-				node *beforeP = (node*)((leftP -> xor) ^ (unsigned int)h);
-				h -> xor = (unsigned int)next2 ^ (unsigned int)next;
-				next -> xor = (unsigned int)h ^ (unsigned int)leftP;
-				if (next2 != NULL){
-					node *next3 = (node*)((unsigned int)next ^ (next2 -> xor));
-					next2 -> xor = (unsigned int)next3 ^ (unsigned int)h;
-				}
-				leftP -> xor = (unsigned int)beforeP ^ (unsigned int)next;
-				
-				leftP = next;
-			}else{
-				leftP = h;
-				h = next;
-			}
-		}
-	
-		if (isSorted)
-			return;
-	}
-	
-	
+printf("\b \b\n");
 }
-			
-
-int main(){
-	node *head, *tail;
-	int i;
-	int n;
-	printf("Please enter the value of n:  ");
-	scanf("%d", &n);
-	
-	head = createList(rand() / 2000000);
-	tail = head;
-	for (i = 0; i < n - 1; i++)
-		insertNode(&head, rand() / 2000000);
-	
-	traverse_from_end_to_front(tail);
-	traverse_from_front_to_end(head);
-	
-	reverse(&head, &tail);
-	
-	traverse_from_end_to_front(tail);
-	traverse_from_front_to_end(head);
-	
-	sort(&head, &tail);
-	
-	traverse_from_front_to_end(head);
-	
-	return 0;
+//---------------------------------------------------------------------------------------
+void reverse(struct node **head, struct node **tail) // since it is symmetric
+{
+  struct node *swap;
+  swap = *head;
+  *head = *tail;
+  *tail = swap;
 }
-	 
-
-
-
-
+//--------------------------------------------------------------------------------------------
+void sort(struct node **head, struct node **tail) //without changing data field of any node.
+{
+  //changing this into a normal linked list by traversing
+  struct node *curr,*prev,*next,*a;
+  curr = (*head)->xor_;
+  a = *head;
+  prev = a;
+  int i;
+  for(i=2;i<=n;i++)
+  {
+    next = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
+    (curr->xor_) = next;
+    prev = curr;
+    curr = next;
+  }
+  *tail = prev;
+  (*tail)->xor_ = NULL;
+  //sorting this normal linked list without changing data field of any node
+  sort_linked_list(head,tail);
+  //converting this back into XOR linked list
+  a = *head;
+  prev = a;
+  next = a->xor_;
+  curr = next;
+  a->xor_ = (struct node*)(((uintptr_t)NULL)^((uintptr_t)(a->xor_)));
+  for(i=2;i<=n;i++)
+  {
+    next = curr->xor_;
+    curr->xor_ = (struct node*)(((uintptr_t)prev)^((uintptr_t)(curr->xor_)));
+    prev = curr;
+    curr = next;
+  }
+}
+//---------------------------------------------------------------------------------------------
+int main()
+{
+//int n;
+srand(time(0)); //seeding
+struct node *a,*c,*head,*tail,*prev,*curr;
+printf("Enter n: ");
+scanf("%d",&n);
+a = (struct node*)malloc(sizeof(struct node));
+a->data = rand()%100; //not more than 2 digits
+head = a; //head
+prev = a;
+c = NULL;
+int i;
+for(i=2;i<=n;i++)
+{
+curr = (struct node*)malloc(sizeof(struct node));
+curr->data = rand()%100;
+prev->xor_ = (struct node*)(((uintptr_t)curr)^((uintptr_t)c)); //xor of previous
+c = prev;
+prev = curr;
+}
+tail = curr; //tail
+curr->xor_ = c;
+traverse_from_front_to_end(head);
+traverse_from_end_to_front(tail);
+reverse(&head,&tail);
+printf("Reversed ");
+traverse_from_front_to_end(head); //after reversing
+sort(&head,&tail);
+printf("Sorted ");
+traverse_from_front_to_end(head);//after sorting
+}
