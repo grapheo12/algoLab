@@ -90,10 +90,9 @@ printf("\b \b\n");
 //---------------------------------------------------------------------------------------
 void reverse(struct node **head, struct node **tail) // since it is symmetric
 {
-  struct node *swap;
-  swap = *head;
-  *head = *tail;
-  *tail = swap;
+    (*head) = (struct node*)((uintptr_t)(*head) +(uintptr_t)(*tail));
+    (*tail) = (struct node*)((uintptr_t)(*head) - (uintptr_t)(*tail));
+    (*head) = (struct node*)((uintptr_t)(*head) - (uintptr_t)(*tail));
 }
 //--------------------------------------------------------------------------------------------
 void sort(struct node **head, struct node **tail) //without change data field of any node.
