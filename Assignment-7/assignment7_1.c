@@ -5,10 +5,10 @@
 
 int maximum(int a,int b)
 {
-	if(a > b)
-	  return a;
-	else
-	  return b;
+  if(a > b)
+   return a;
+  else
+   return b;
 }
 
 int capsule_recursive(int n , int k)
@@ -43,11 +43,11 @@ int capsule_recursive(int n , int k)
   min_trails = INT_MAX; 
   for (p = 1; p <= n; p++) 
   { 
-		temp = maximum(capsule_recursive(p-1,k-1),capsule_recursive(n-p,k)); 
-		if (temp < min_trails) 
-			min_trails = temp; 
-	} 
-	ans = min_trails + 1; 
+      temp = maximum(capsule_recursive(p-1,k-1),capsule_recursive(n-p,k)); 
+      if (temp < min_trails) 
+	min_trails = temp; 
+  } 
+  ans = min_trails + 1; 
   return ans;
 } 
 
@@ -80,7 +80,7 @@ int capsule_dp(int n , int k)
       } 
     } 
   } 
-
+	
   return array[k][n]; 
 } 
 
